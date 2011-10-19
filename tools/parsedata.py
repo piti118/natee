@@ -31,7 +31,7 @@ def parser(fname):
         j = j.contents[0]
         depth +=1
         assert(depth < 5)
-      rowcontent.append(j.string)
+      rowcontent.append(j.string.replace(',',''))#take care of comma in numbers
     dataarray.append(rowcontent)
   del bs
   m = {}
