@@ -21,8 +21,24 @@ def main():
         data[1] = dc
         d,m,y = data[0].split('/')
         thisdate = datetime.date(int(y)-543,int(m),int(d)) #build date from data[0]
-        #only date, dam code, incoming water, and historical data for amount of water
-        reduced_data[dc].append( (thisdate,[data[0],data[1],data[6],data[14]]) )
+        #only date
+        #dam code
+        #water-in
+        #water-lvl
+        #out-electricity
+        #out spill
+        #out irr
+        reduced_data[dc].append((thisdate,
+            [
+            data[0],#date
+            data[1],#dam code
+            data[6],#water in
+            data[14],#water lvl
+            data[9],#out_elec
+            data[10],#out_spill
+            data[11],#out_irr
+            data[12]#in_pump
+            ]))
     
     #now all the data is in. sort them by date
     for key in reduced_data.keys():
@@ -40,8 +56,8 @@ def main():
     for key in reduced_data.keys():
         data = reduced_data[key]
         for i,item in enumerate(data):
-            if item[1][2]=='X': item[1][2] = data[i-1][1][2]
-            if item[1][3]=='X': item[1][3] = data[i-1][1][3]
+            for j,x in enumerate(item[1]):
+                if x=='X': item[1][j] = data[i-1][1][j]
     
     #sanity check that there is no missing hole
     print 'Checking'
@@ -51,8 +67,19 @@ def main():
             if item[1][2]=='X' or item[1][3]=='X': print 'bad', i, item[0]
     #write sort data to key    
     print 'Done'
+    
     for key in reduced_data.keys():
         out = open('data/'+key+'.csv','w')
+        header = [
+            'date_d', 
+            'dam_code_s',
+            'water_in_f',
+            'water_lvl_f',
+            'out_elec_f',
+            'out_spill_f',
+            'out_irr_f',
+            'in_pump_f']
+        out.write(','.join(header)+'\n')
         for date,val in reduced_data[key]:
             out.write(u','.join(val)+'\n')
             out.flush()
