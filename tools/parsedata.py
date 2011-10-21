@@ -45,7 +45,7 @@ def main():
   allf = glob.glob('rawhtml/*.html')
   result = {}
   first = True
-  f = codecs.open('data.csv','w','utf-8')
+  f = codecs.open('data/data.csv','w','utf-8')
   for fname in allf:
     m = parser(fname)
     if first:
