@@ -3,6 +3,7 @@ import codecs
 import datetime
 from daminfo import dam_code
 def main():
+    
     f = codecs.open('data/data.csv','rb','utf-8')
     #f = open('data.csv','r','utf-8')
     first = True
@@ -37,6 +38,7 @@ def main():
             data[9],#out_elec
             data[10],#out_spill
             data[11],#out_irr
+            0.,#out
             data[12]#in_pump
             ]))
     
@@ -68,6 +70,11 @@ def main():
     #write sort data to key    
     print 'Done'
     
+    #now make out(7)
+    for key,data in reduced_data.items():
+        for i,item in enumerate(data):
+            item[1][7]=str(float(item[1][4])+float(item[1][5])+float(item[1][6]))
+    
     for key in reduced_data.keys():
         out = open('data/'+key+'.csv','w')
         header = [
@@ -78,6 +85,7 @@ def main():
             'out_elec_f',
             'out_spill_f',
             'out_irr_f',
+            'out_f',
             'in_pump_f']
         out.write(','.join(header)+'\n')
         for date,val in reduced_data[key]:
